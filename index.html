@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.55">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Retail Customer Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/quarto.js"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="index_files/libs/quarto-html/anchor.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Retail Customer Analysis</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>In this project, we delve into a comprehensive data analysis and modeling task centered around customer data from the Adventure Works Cycles company. The primary objective is to leverage the demographic and purchase data collected to build predictive models that can provide actionable insights for the company. The challenge is structured to put into practice key principles and techniques learned throughout the course, requiring interpretation of requirements, performance of necessary tasks, and optimization of models to achieve the best results.</p>
+<section id="dataset-overview" class="level3">
+<h3 class="anchored" data-anchor-id="dataset-overview">Dataset Overview</h3>
+<p>The data used in this project is composed of three distinct files, each containing crucial information about Adventure Works Cycles’ customers:</p>
+<ol type="1">
+<li><strong>AdvWorksCusts.csv</strong>: This file contains detailed demographic data for each customer, including:
+<ul>
+<li><strong>CustomerID</strong>: Unique identifier for each customer.</li>
+<li><strong>Title, FirstName, MiddleName, LastName, Suffix</strong>: Personal details of the customer.</li>
+<li><strong>AddressLine1, AddressLine2, City, StateProvince, CountryRegion, PostalCode</strong>: Address details of the customer.</li>
+<li><strong>PhoneNumber</strong>: Contact number of the customer.</li>
+<li><strong>BirthDate</strong>: Date of birth of the customer.</li>
+<li><strong>Education</strong>: Education level of the customer.</li>
+<li><strong>Occupation</strong>: Job type of the customer.</li>
+<li><strong>Gender</strong>: Gender of the customer.</li>
+<li><strong>MaritalStatus</strong>: Marital status of the customer.</li>
+<li><strong>HomeOwnerFlag</strong>: Indicates whether the customer owns a home.</li>
+<li><strong>NumberCarsOwned, NumberChildrenAtHome, TotalChildren</strong>: Details about the customer’s family.</li>
+<li><strong>YearlyIncome</strong>: Annual income of the customer.</li>
+</ul></li>
+<li><strong>AW_AveMonthSpend.csv</strong>: This file contains sales data for existing customers, specifically:
+<ul>
+<li><strong>CustomerID</strong>: Unique identifier for each customer.</li>
+<li><strong>AveMonthSpend</strong>: Average monthly spend of the customer with Adventure Works Cycles.</li>
+</ul></li>
+<li><strong>AW_BikeBuyer.csv</strong>: This file also contains sales data, indicating:
+<ul>
+<li><strong>CustomerID</strong>: Unique identifier for each customer.</li>
+<li><strong>BikeBuyer</strong>: A flag indicating whether the customer has previously purchased a bike.</li>
+</ul></li>
+</ol>
+</section>
+<section id="project-purpose" class="level3">
+<h3 class="anchored" data-anchor-id="project-purpose">Project Purpose</h3>
+<p>The primary goals of this project are as follows:</p>
+<ol type="1">
+<li><strong>Explore Customer Data</strong>: Gain insights into customer characteristics and purchasing behavior.</li>
+<li><strong>Build Regression Model</strong>: Predict the average monthly spend of a customer based on demographic and purchase data.</li>
+</ol>
+</section>
+<section id="workflow-process" class="level3">
+<h3 class="anchored" data-anchor-id="workflow-process">Workflow Process</h3>
+<p>The project is divided into several key phases, each focusing on different aspects of the data analysis and modeling process:</p>
+<ol type="1">
+<li><strong>Data Exploration</strong>:
+<ul>
+<li>Load and inspect the datasets to understand the structure and content.</li>
+<li>Perform exploratory data analysis (EDA) to identify patterns, correlations, and potential anomalies.</li>
+<li>Visualize the data to gain deeper insights into customer demographics and purchasing behavior.</li>
+</ul></li>
+<li><strong>Data Preprocessing</strong>:
+<ul>
+<li>Clean the datasets by handling missing values, removing duplicates, and correcting data types.</li>
+<li>Merge the datasets based on the common <code>CustomerID</code> field to create a comprehensive dataset.</li>
+<li>Feature engineering to create new variables that may enhance the predictive power of the models.</li>
+</ul></li>
+<li><strong>Model Building</strong>:
+<ul>
+<li><strong>Regression Model</strong>: Predict the average monthly spend of customers.
+<ul>
+<li>Split the data into training and testing sets.</li>
+<li>Train various regression models (e.g., linear regression, decision trees, random forests).</li>
+<li>Evaluate model performance using metrics such as mean absolute error (MAE) and root mean squared error (RMSE).</li>
+<li>Optimize the best-performing model using hyperparameter tuning.</li>
+</ul></li>
+</ul></li>
+<li><strong>Model Testing and Prediction</strong>:
+<ul>
+<li>Apply the trained models to the test datasets to predict the outcomes for new customers.</li>
+<li>Use the regression model to predict average monthly spend for new customers, evaluating the model’s predictive accuracy.</li>
+</ul></li>
+</ol>
+</section>
+<section id="conclusion" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
+<p>This project demonstrates the application of key data analysis and machine learning techniques to real-world customer data. By exploring the data, building predictive models, and evaluating their performance, we aim to provide valuable insights to Adventure Works Cycles, aiding in strategic decision-making and enhancing customer relationships. The challenge underscores the importance of a systematic approach to data preprocessing, model building, and evaluation, ensuring robust and reliable predictive outcomes.</p>
+</section>
+<section id="data-exploration-phase" class="level3">
+<h3 class="anchored" data-anchor-id="data-exploration-phase">Data Exploration Phase</h3>
+<p>The data exploration phase involves understanding the structure and characteristics of the datasets. We’ll load the datasets, inspect their contents, check for missing values, and perform basic statistical analysis to gain initial insights.</p>
+<section id="step-1-import-necessary-libraries" class="level4">
+<h4 class="anchored" data-anchor-id="step-1-import-necessary-libraries">Step 1: Import Necessary Libraries</h4>
+<div id="8361115a" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-2-load-the-datasets" class="level4">
+<h4 class="anchored" data-anchor-id="step-2-load-the-datasets">Step 2: Load the Datasets</h4>
+<div id="4c1c0f30" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the datasets</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>customers_df <span class="op">=</span> pd.read_csv(<span class="st">'AdvWorksCusts.csv'</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>monthly_spend_df <span class="op">=</span> pd.read_csv(<span class="st">'AW_AveMonthSpend.csv'</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>bike_buyer_df <span class="op">=</span> pd.read_csv(<span class="st">'AW_BikeBuyer.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-3-inspect-the-data" class="level4">
+<h4 class="anchored" data-anchor-id="step-3-inspect-the-data">Step 3: Inspect the Data</h4>
+<div id="0e3d9e79" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#1. View the First Few Rows: Check the first few rows of each dataset to get an initial understanding of the data.</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(customers_df.head())</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(monthly_spend_df.head())</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(bike_buyer_df.head())</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#2. Summary Statistics: Get a summary of each dataset, including basic statistics for numeric columns.</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(customers_df.describe())</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(monthly_spend_df.describe())</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(bike_buyer_df.describe())</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#3. Information and Data Types: Check the data types of each column and the presence of null values.</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(customers_df.info())</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(monthly_spend_df.info())</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(bike_buyer_df.info())</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co">#4. Missing Values: Identify columns with missing values.</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(customers_df.isnull().<span class="bu">sum</span>())</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(monthly_spend_df.isnull().<span class="bu">sum</span>())</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(bike_buyer_df.isnull().<span class="bu">sum</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   CustomerID Title  FirstName MiddleName LastName Suffix  \
+0       11000   NaN        Jon          V     Yang    NaN   
+1       11001   NaN     Eugene          L    Huang    NaN   
+2       11002   NaN      Ruben        NaN   Torres    NaN   
+3       11003   NaN    Christy        NaN      Zhu    NaN   
+4       11004   NaN  Elizabeth        NaN  Johnson    NaN   
+
+          AddressLine1 AddressLine2         City StateProvinceName  ...  \
+0      3761 N. 14th St          NaN  Rockhampton        Queensland  ...   
+1           2243 W St.          NaN      Seaford          Victoria  ...   
+2     5844 Linden Land          NaN       Hobart          Tasmania  ...   
+3     1825 Village Pl.          NaN   North Ryde   New South Wales  ...   
+4  7553 Harness Circle          NaN   Wollongong   New South Wales  ...   
+
+    BirthDate   Education    Occupation Gender MaritalStatus HomeOwnerFlag  \
+0  1966-04-08  Bachelors   Professional      M             M             1   
+1  1965-05-14  Bachelors   Professional      M             S             0   
+2  1965-08-12  Bachelors   Professional      M             M             1   
+3  1968-02-15  Bachelors   Professional      F             S             0   
+4  1968-08-08  Bachelors   Professional      F             S             1   
+
+  NumberCarsOwned NumberChildrenAtHome  TotalChildren  YearlyIncome  
+0               0                    0              2        137947  
+1               1                    3              3        101141  
+2               1                    3              3         91945  
+3               1                    0              0         86688  
+4               4                    5              5         92771  
+
+[5 rows x 23 columns]
+   CustomerID  AveMonthSpend
+0       11000             89
+1       11001            117
+2       11002            123
+3       11003             50
+4       11004             95
+   CustomerID  BikeBuyer
+0       11000          0
+1       11001          1
+2       11002          0
+3       11003          0
+4       11004          1
+         CustomerID  HomeOwnerFlag  NumberCarsOwned  NumberChildrenAtHome  \
+count  16519.000000   16519.000000     16519.000000          16519.000000   
+mean   20234.225195       0.673891         1.500999              0.992009   
+std     5342.515987       0.468802         1.138962              1.515048   
+min    11000.000000       0.000000         0.000000              0.000000   
+25%    15604.500000       0.000000         1.000000              0.000000   
+50%    20221.000000       1.000000         2.000000              0.000000   
+75%    24860.500000       1.000000         2.000000              2.000000   
+max    29482.000000       1.000000         4.000000              5.000000   
+
+       TotalChildren   YearlyIncome  
+count   16519.000000   16519.000000  
+mean        2.006235   78122.511532  
+std         1.682736   39710.985718  
+min         0.000000    9482.000000  
+25%         0.000000   47807.500000  
+50%         2.000000   76120.000000  
+75%         3.000000  105194.500000  
+max         5.000000  196511.000000  
+         CustomerID  AveMonthSpend
+count  16519.000000   16519.000000
+mean   20234.225195      72.405957
+std     5342.515987      27.285370
+min    11000.000000      22.000000
+25%    15604.500000      52.000000
+50%    20221.000000      68.000000
+75%    24860.500000      84.000000
+max    29482.000000     176.000000
+         CustomerID     BikeBuyer
+count  16519.000000  16519.000000
+mean   20234.225195      0.332284
+std     5342.515987      0.471046
+min    11000.000000      0.000000
+25%    15604.500000      0.000000
+50%    20221.000000      0.000000
+75%    24860.500000      1.000000
+max    29482.000000      1.000000
+&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 16519 entries, 0 to 16518
+Data columns (total 23 columns):
+ #   Column                Non-Null Count  Dtype 
+---  ------                --------------  ----- 
+ 0   CustomerID            16519 non-null  int64 
+ 1   Title                 88 non-null     object
+ 2   FirstName             16519 non-null  object
+ 3   MiddleName            9534 non-null   object
+ 4   LastName              16519 non-null  object
+ 5   Suffix                2 non-null      object
+ 6   AddressLine1          16519 non-null  object
+ 7   AddressLine2          276 non-null    object
+ 8   City                  16519 non-null  object
+ 9   StateProvinceName     16519 non-null  object
+ 10  CountryRegionName     16519 non-null  object
+ 11  PostalCode            16519 non-null  object
+ 12  PhoneNumber           16519 non-null  object
+ 13  BirthDate             16519 non-null  object
+ 14  Education             16519 non-null  object
+ 15  Occupation            16519 non-null  object
+ 16  Gender                16519 non-null  object
+ 17  MaritalStatus         16519 non-null  object
+ 18  HomeOwnerFlag         16519 non-null  int64 
+ 19  NumberCarsOwned       16519 non-null  int64 
+ 20  NumberChildrenAtHome  16519 non-null  int64 
+ 21  TotalChildren         16519 non-null  int64 
+ 22  YearlyIncome          16519 non-null  int64 
+dtypes: int64(6), object(17)
+memory usage: 2.9+ MB
+None
+&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 16519 entries, 0 to 16518
+Data columns (total 2 columns):
+ #   Column         Non-Null Count  Dtype
+---  ------         --------------  -----
+ 0   CustomerID     16519 non-null  int64
+ 1   AveMonthSpend  16519 non-null  int64
+dtypes: int64(2)
+memory usage: 258.2 KB
+None
+&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 16519 entries, 0 to 16518
+Data columns (total 2 columns):
+ #   Column      Non-Null Count  Dtype
+---  ------      --------------  -----
+ 0   CustomerID  16519 non-null  int64
+ 1   BikeBuyer   16519 non-null  int64
+dtypes: int64(2)
+memory usage: 258.2 KB
+None
+CustomerID                  0
+Title                   16431
+FirstName                   0
+MiddleName               6985
+LastName                    0
+Suffix                  16517
+AddressLine1                0
+AddressLine2            16243
+City                        0
+StateProvinceName           0
+CountryRegionName           0
+PostalCode                  0
+PhoneNumber                 0
+BirthDate                   0
+Education                   0
+Occupation                  0
+Gender                      0
+MaritalStatus               0
+HomeOwnerFlag               0
+NumberCarsOwned             0
+NumberChildrenAtHome        0
+TotalChildren               0
+YearlyIncome                0
+dtype: int64
+CustomerID       0
+AveMonthSpend    0
+dtype: int64
+CustomerID    0
+BikeBuyer     0
+dtype: int64</code></pre>
+</div>
+</div>
+</section>
+<section id="step-4-exploratory-data-analysis-eda" class="level4">
+<h4 class="anchored" data-anchor-id="step-4-exploratory-data-analysis-eda">Step 4: Exploratory Data Analysis (EDA)</h4>
+<div id="2b5cdf5d" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#1. Distribution of Demographic Features: Visualize the distribution of key demographic features using histograms and bar plots.</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram of Age</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>customers_df[<span class="st">'BirthDate'</span>] <span class="op">=</span> pd.to_datetime(customers_df[<span class="st">'BirthDate'</span>])</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>customers_df[<span class="st">'Age'</span>] <span class="op">=</span> (pd.to_datetime(<span class="st">'1998-01-01'</span>) <span class="op">-</span> customers_df[<span class="st">'BirthDate'</span>]).dt.days <span class="op">//</span> <span class="dv">365</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>sns.histplot(customers_df[<span class="st">'Age'</span>], bins<span class="op">=</span><span class="dv">30</span>, kde<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Distribution of Age'</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Age'</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Frequency'</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Bar plot of Education levels</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>sns.countplot(data<span class="op">=</span>customers_df, x<span class="op">=</span><span class="st">'Education'</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Distribution of Education Levels'</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Education Level'</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Count'</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">45</span>)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Bar plot of Occupation types</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>sns.countplot(data<span class="op">=</span>customers_df, x<span class="op">=</span><span class="st">'Occupation'</span>)</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Distribution of Occupation Types'</span>)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Occupation'</span>)</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Count'</span>)</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">45</span>)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="co">#2. Correlation Analysis: Analyze the correlation between numeric features to identify potential relationships.</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlation matrix</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>numeric_columns <span class="op">=</span> customers_df.select_dtypes(include<span class="op">=</span>[np.number])</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>corr_matrix <span class="op">=</span> numeric_columns.corr()</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>sns.heatmap(corr_matrix, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">'coolwarm'</span>, fmt<span class="op">=</span><span class="st">'.2f'</span>)</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Correlation Matrix'</span>)</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="co">#3. Distribution of Target Variables: Visualize the distribution of the target variables (BikeBuyer and AveMonthSpend).</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram of Average Monthly Spend</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>sns.histplot(monthly_spend_df[<span class="st">'AveMonthSpend'</span>], bins<span class="op">=</span><span class="dv">30</span>, kde<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Distribution of Average Monthly Spend'</span>)</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Average Monthly Spend'</span>)</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Frequency'</span>)</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Bar plot of Bike Buyer</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>sns.countplot(data<span class="op">=</span>bike_buyer_df, x<span class="op">=</span><span class="st">'BikeBuyer'</span>)</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Distribution of Bike Buyer'</span>)</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Bike Buyer'</span>)</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Count'</span>)</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-5-output-1.png" width="828" height="523" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-5-output-2.png" width="825" height="608" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-5-output-3.png" width="825" height="588" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-5-output-4.png" width="1010" height="802" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-5-output-5.png" width="825" height="523" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-5-output-6.png" width="833" height="523" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="description" class="level3">
+<h3 class="anchored" data-anchor-id="description">Description</h3>
+<ol type="1">
+<li><p><strong>Loading Data</strong>: We start by loading the datasets using <code>pandas</code>. The <code>pd.read_csv()</code> function is used to read CSV files into DataFrames.</p></li>
+<li><p><strong>Inspecting Data</strong>: We use <code>head()</code>, <code>describe()</code>, and <code>info()</code> functions to get an initial overview of the data, including the first few rows, summary statistics, and data types.</p></li>
+<li><p><strong>Checking Missing Values</strong>: The <code>isnull().sum()</code> function helps us identify columns with missing values, which is crucial for data cleaning.</p></li>
+<li><p><strong>Exploratory Data Analysis (EDA)</strong>:</p>
+<ul>
+<li>We visualize the distribution of key demographic features (Age, Education, and Occupation) using histograms and bar plots to understand the data better.</li>
+<li>The correlation matrix is used to identify relationships between numeric features.</li>
+<li>We examine the distribution of target variables (Average Monthly Spend and Bike Buyer) to understand their characteristics.</li>
+</ul></li>
+</ol>
+<p>With these initial insights, we can proceed to the data preprocessing phase, where we will clean the data, handle missing values, and prepare it for model building.</p>
+</section>
+</section>
+<section id="data-preprocessing-phase" class="level2">
+<h2 class="anchored" data-anchor-id="data-preprocessing-phase">Data Preprocessing Phase</h2>
+<p>The preprocessing phase involves preparing the data for analysis and modeling. This includes cleaning the data, handling missing values, merging datasets, and creating new features that may enhance the predictive power of our models. Below is the code and its detailed description for the preprocessing steps performed:</p>
+<div id="41528981" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 1: Import Necessary Libraries</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime, timedelta, date</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 2: Load the Datasets</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#We start by loading the three datasets: customer demographics, average monthly spend, and bike buyer data.</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>AdvWorksCusts <span class="op">=</span> pd.read_csv(<span class="st">'AdvWorksCusts.csv'</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>AW_BikeBuyer <span class="op">=</span> pd.read_csv(<span class="st">'AW_BikeBuyer.csv'</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>AW_AveMonthSpend <span class="op">=</span> pd.read_csv(<span class="st">'AW_AveMonthSpend.csv'</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 3: Remove Duplicates</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">#To ensure data integrity, we remove any duplicate entries based on the `CustomerID` column.</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>AdvWorksCusts.drop_duplicates(subset<span class="op">=</span>[<span class="st">'CustomerID'</span>], keep<span class="op">=</span><span class="st">'first'</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>AW_BikeBuyer.drop_duplicates(subset<span class="op">=</span>[<span class="st">'CustomerID'</span>], keep<span class="op">=</span><span class="st">'first'</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>AW_AveMonthSpend.drop_duplicates(subset<span class="op">=</span>[<span class="st">'CustomerID'</span>], keep<span class="op">=</span><span class="st">'first'</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 4: Merge Datasets</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">#We merge the three datasets into a single DataFrame using the `CustomerID` column as the key.</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.merge(AdvWorksCusts, AW_AveMonthSpend, on<span class="op">=</span><span class="st">'CustomerID'</span>)</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.merge(df, AW_BikeBuyer, on<span class="op">=</span><span class="st">'CustomerID'</span>)</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 5: Drop Irrelevant Columns</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co">#Certain columns are not needed for our analysis and modeling, so we drop them to simplify the dataset.</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>df.drop([<span class="st">'Title'</span>, <span class="st">'FirstName'</span>, <span class="st">'LastName'</span>, <span class="st">'MiddleName'</span>, <span class="st">'Suffix'</span>, <span class="st">'AddressLine1'</span>,</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>         <span class="st">'AddressLine2'</span>, <span class="st">'StateProvinceName'</span>, <span class="st">'PhoneNumber'</span>, <span class="st">'City'</span>, <span class="st">'PostalCode'</span>], axis<span class="op">=</span><span class="dv">1</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 6: Calculate Age</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a><span class="co">#We calculate the age of each customer based on their birthdate and the data collection date (January 1, 1998). We then convert the age from days to years and drop the intermediate columns used in this calculation.</span></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'BirthDate'</span>] <span class="op">=</span> pd.to_datetime(df[<span class="st">'BirthDate'</span>])</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Coll_date'</span>] <span class="op">=</span> pd.to_datetime(date(year<span class="op">=</span><span class="dv">1998</span>, month<span class="op">=</span><span class="dv">1</span>, day<span class="op">=</span><span class="dv">1</span>))</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Age'</span>] <span class="op">=</span> (df[<span class="st">'Coll_date'</span>] <span class="op">-</span> df[<span class="st">'BirthDate'</span>]).dt.days <span class="op">//</span> <span class="dv">365</span></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 7: Drop Unnecessary Columns</span></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a><span class="co">#We drop additional columns that are not needed for our regression model, such as `HomeOwnerFlag` and `BikeBuyer`.</span></span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>df.drop([<span class="st">'HomeOwnerFlag'</span>, <span class="st">'BikeBuyer'</span>], axis<span class="op">=</span><span class="dv">1</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 8: Create New Features</span></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a><span class="co">#We create a new feature `ChildrenOut`, which represents the number of children not living at home by subtracting `NumberChildrenAtHome` from `TotalChildren`.</span></span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'ChildrenOut'</span>] <span class="op">=</span> df[<span class="st">'TotalChildren'</span>] <span class="op">-</span> df[<span class="st">'NumberChildrenAtHome'</span>]</span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 9: Inspect the Processed Data</span></span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a><span class="co">#We use the `info()` method to check the structure and data types of the processed DataFrame.</span></span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>df.info()</span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 10: Save the Processed Data</span></span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a><span class="co">#Finally, we save the cleaned and processed DataFrame to a new CSV file for use in the modeling phase.</span></span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>df.to_csv(<span class="st">'Reg_AveMonthSpend.csv'</span>, index<span class="op">=</span><span class="va">False</span>, header<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 16404 entries, 0 to 16403
+Data columns (total 15 columns):
+ #   Column                Non-Null Count  Dtype         
+---  ------                --------------  -----         
+ 0   CustomerID            16404 non-null  int64         
+ 1   CountryRegionName     16404 non-null  object        
+ 2   BirthDate             16404 non-null  datetime64[ns]
+ 3   Education             16404 non-null  object        
+ 4   Occupation            16404 non-null  object        
+ 5   Gender                16404 non-null  object        
+ 6   MaritalStatus         16404 non-null  object        
+ 7   NumberCarsOwned       16404 non-null  int64         
+ 8   NumberChildrenAtHome  16404 non-null  int64         
+ 9   TotalChildren         16404 non-null  int64         
+ 10  YearlyIncome          16404 non-null  int64         
+ 11  AveMonthSpend         16404 non-null  int64         
+ 12  Coll_date             16404 non-null  datetime64[ns]
+ 13  Age                   16404 non-null  int64         
+ 14  ChildrenOut           16404 non-null  int64         
+dtypes: datetime64[ns](2), int64(8), object(5)
+memory usage: 1.9+ MB</code></pre>
+</div>
+</div>
+<section id="description-1" class="level3">
+<h3 class="anchored" data-anchor-id="description-1">Description</h3>
+<ol type="1">
+<li><p><strong>Loading Data</strong>: We load the customer demographic, average monthly spend, and bike buyer data into three separate DataFrames using <code>pd.read_csv()</code>.</p></li>
+<li><p><strong>Removing Duplicates</strong>: We remove duplicate rows based on the <code>CustomerID</code> column to ensure each customer is represented only once in each dataset.</p></li>
+<li><p><strong>Merging Datasets</strong>: The datasets are merged into a single DataFrame using <code>CustomerID</code> as the key. This creates a comprehensive dataset that includes demographic data, average monthly spend, and bike buying behavior for each customer.</p></li>
+<li><p><strong>Dropping Irrelevant Columns</strong>: We drop columns that are not needed for our analysis and modeling, such as personal details and address information.</p></li>
+<li><p><strong>Calculating Age</strong>: We calculate the age of each customer as of January 1, 1998, and convert this from days to years. Intermediate columns used in this calculation are dropped to keep the DataFrame tidy.</p></li>
+<li><p><strong>Dropping Additional Columns</strong>: We further simplify the dataset by dropping columns like <code>HomeOwnerFlag</code> and <code>BikeBuyer</code> that are not required for the regression model.</p></li>
+<li><p><strong>Creating New Features</strong>: A new feature <code>ChildrenOut</code> is created to represent the number of children not living at home, which could be a useful predictor in our model.</p></li>
+<li><p><strong>Inspecting the Processed Data</strong>: We use the <code>info()</code> method to verify the structure and data types of the processed DataFrame, ensuring it is ready for modeling.</p></li>
+<li><p><strong>Saving the Processed Data</strong>: The cleaned and processed DataFrame is saved to a new CSV file, <code>Reg_AveMonthSpend.csv</code>, which will be used in the next phase of the project to build and evaluate the regression model.</p></li>
+</ol>
+</section>
+<section id="test-data-preparation-phase" class="level3">
+<h3 class="anchored" data-anchor-id="test-data-preparation-phase">Test Data Preparation Phase</h3>
+<p>The test data preparation phase involves cleaning and transforming the test dataset in the same manner as the training dataset. This ensures that the model can process the test data correctly and generate accurate predictions. Below is the code and its detailed description for the test data preparation steps performed:</p>
+<div id="95b25ba5" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 1: Import Necessary Libraries</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime, timedelta, date</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 2: Load the Test Dataset</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#We load the test dataset, which contains demographic and other relevant features for the customers.</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'AW_test.csv'</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 3: Drop Irrelevant Columns</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">#We remove columns that are not needed for our analysis and modeling to simplify the dataset.</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>df.drop([<span class="st">'Title'</span>, <span class="st">'FirstName'</span>, <span class="st">'LastName'</span>, <span class="st">'MiddleName'</span>, <span class="st">'Suffix'</span>, <span class="st">'AddressLine1'</span>,</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>         <span class="st">'AddressLine2'</span>, <span class="st">'StateProvinceName'</span>, <span class="st">'PhoneNumber'</span>, <span class="st">'City'</span>, <span class="st">'PostalCode'</span>], axis<span class="op">=</span><span class="dv">1</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 4: Calculate Age</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="co">#We calculate the age of each customer based on their birthdate and the data collection date (January 1, 1998). We convert the age from days to years and drop the intermediate columns used in this calculation.</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'BirthDate'</span>] <span class="op">=</span> pd.to_datetime(df[<span class="st">'BirthDate'</span>])</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Coll_date'</span>] <span class="op">=</span> pd.to_datetime(date(year<span class="op">=</span><span class="dv">1998</span>, month<span class="op">=</span><span class="dv">1</span>, day<span class="op">=</span><span class="dv">1</span>))</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Age'</span>] <span class="op">=</span> (df[<span class="st">'Coll_date'</span>] <span class="op">-</span> df[<span class="st">'BirthDate'</span>]).dt.days <span class="op">//</span> <span class="dv">365</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 5: Drop Unnecessary Columns</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="co">#We further simplify the dataset by dropping columns that are not required for the regression model.</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>df.drop([<span class="st">'HomeOwnerFlag'</span>], axis<span class="op">=</span><span class="dv">1</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 6: Create New Features</span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="co">#We create a new feature `ChildrenOut`, which represents the number of children not living at home by subtracting `NumberChildrenAtHome` from `TotalChildren`.</span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'ChildrenOut'</span>] <span class="op">=</span> df[<span class="st">'TotalChildren'</span>] <span class="op">-</span> df[<span class="st">'NumberChildrenAtHome'</span>]</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 7: Inspect the Processed Data</span></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a><span class="co">#We use the `info()` method to check the structure and data types of the processed DataFrame.</span></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>df.info()</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 8: Save the Processed Test Data</span></span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a><span class="co">#Finally, we save the cleaned and processed test DataFrame to a new CSV file for use in the testing phase of the project.</span></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>df.to_csv(<span class="st">'Test_Data_Prepped.csv'</span>, index<span class="op">=</span><span class="va">False</span>, header<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 500 entries, 0 to 499
+Data columns (total 14 columns):
+ #   Column                Non-Null Count  Dtype         
+---  ------                --------------  -----         
+ 0   CustomerID            500 non-null    int64         
+ 1   CountryRegionName     500 non-null    object        
+ 2   BirthDate             500 non-null    datetime64[ns]
+ 3   Education             500 non-null    object        
+ 4   Occupation            500 non-null    object        
+ 5   Gender                500 non-null    object        
+ 6   MaritalStatus         500 non-null    object        
+ 7   NumberCarsOwned       500 non-null    int64         
+ 8   NumberChildrenAtHome  500 non-null    int64         
+ 9   TotalChildren         500 non-null    int64         
+ 10  YearlyIncome          500 non-null    int64         
+ 11  Coll_date             500 non-null    datetime64[ns]
+ 12  Age                   500 non-null    int64         
+ 13  ChildrenOut           500 non-null    int64         
+dtypes: datetime64[ns](2), int64(7), object(5)
+memory usage: 54.8+ KB</code></pre>
+</div>
+</div>
+</section>
+<section id="description-2" class="level3">
+<h3 class="anchored" data-anchor-id="description-2">Description</h3>
+<ol type="1">
+<li><p><strong>Loading Data</strong>: We load the test dataset into a DataFrame using <code>pd.read_csv()</code>.</p></li>
+<li><p><strong>Dropping Irrelevant Columns</strong>: We remove columns that are not necessary for our analysis and modeling, such as personal details and address information.</p></li>
+<li><p><strong>Calculating Age</strong>: We calculate the age of each customer as of January 1, 1998, and convert this from days to years. Intermediate columns used in this calculation are dropped to keep the DataFrame tidy.</p></li>
+<li><p><strong>Dropping Unnecessary Columns</strong>: We drop additional columns that are not needed for the regression model, such as <code>HomeOwnerFlag</code>.</p></li>
+<li><p><strong>Creating New Features</strong>: A new feature <code>ChildrenOut</code> is created to represent the number of children not living at home, which could be a useful predictor in our model.</p></li>
+<li><p><strong>Inspecting the Processed Data</strong>: We use the <code>info()</code> method to verify the structure and data types of the processed DataFrame, ensuring it is ready for testing.</p></li>
+<li><p><strong>Saving the Processed Data</strong>: The cleaned and processed test DataFrame is saved to a new CSV file, <code>Test_Data_Prepped.csv</code>, which will be used in the testing phase to evaluate the model’s performance.</p></li>
+</ol>
+</section>
+<section id="regression-model-building-phase" class="level3">
+<h3 class="anchored" data-anchor-id="regression-model-building-phase">Regression Model Building Phase</h3>
+<p>In this phase, we build a regression model to predict the average monthly spend of customers based on their demographic and purchase data. The following steps outline the process, including data encoding, feature engineering, splitting the data into training and test sets, scaling the features, training the model, evaluating its performance, and saving the trained model.</p>
+<div id="77ca5948" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 1: Import Necessary Libraries</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#We begin by importing the required libraries for data manipulation, preprocessing, model building, and evaluation.</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> preprocessing</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn.model_selection <span class="im">as</span> ms</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> linear_model</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn.metrics <span class="im">as</span> sklm</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> ss</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pickle</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 2: Load and Inspect the Data</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">#We load the preprocessed dataset and display the first few rows to understand its structure.</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'Reg_AveMonthSpend.csv'</span>)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>df.head()</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 3: Extract Labels</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="co">#We extract the target variable (`AveMonthSpend`) which we aim to predict.</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> np.array(df[<span class="st">'AveMonthSpend'</span>])</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 4: Encode Categorical Features</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="co">#We define a function to encode categorical features using one-hot encoding.</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> encode_string(cat_features):</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>    enc <span class="op">=</span> preprocessing.LabelEncoder()</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>    enc.fit(cat_features)</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>    enc_cat_features <span class="op">=</span> enc.transform(cat_features)</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>    ohe <span class="op">=</span> preprocessing.OneHotEncoder()</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>    encoded <span class="op">=</span> ohe.fit(enc_cat_features.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> encoded.transform(enc_cat_features.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)).toarray()</span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a><span class="co">#We apply this function to all categorical columns and concatenate the resulting arrays to form our feature matrix.</span></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>categorical_columns <span class="op">=</span> [<span class="st">'Education'</span>, <span class="st">'Occupation'</span>, <span class="st">'Gender'</span>, <span class="st">'MaritalStatus'</span>]</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>Features <span class="op">=</span> encode_string(df[<span class="st">'CountryRegionName'</span>])</span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> categorical_columns:</span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>    temp <span class="op">=</span> encode_string(df[col])</span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>    Features <span class="op">=</span> np.concatenate([Features, temp], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 5: Concatenate Numerical Features</span></span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a><span class="co">#We add numerical features to the feature matrix.</span></span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>Features <span class="op">=</span> np.concatenate([Features, np.array(df[[<span class="st">'NumberCarsOwned'</span>,</span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'NumberChildrenAtHome'</span>, <span class="st">'YearlyIncome'</span>, <span class="st">'Age'</span>, <span class="st">'ChildrenOut'</span>]])], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 6: Split Data into Training and Test Sets</span></span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a><span class="co">#We split the data into training and test sets, reserving 20% of the data for testing.</span></span>
+<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>indx <span class="op">=</span> <span class="bu">range</span>(Features.shape[<span class="dv">0</span>])</span>
+<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a>indx <span class="op">=</span> ms.train_test_split(indx, test_size<span class="op">=</span><span class="bu">int</span>(<span class="fl">0.2</span><span class="op">*</span>df.shape[<span class="dv">0</span>]))</span>
+<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a>x_train <span class="op">=</span> Features[indx[<span class="dv">0</span>], :]</span>
+<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a>y_train <span class="op">=</span> np.ravel(labels[indx[<span class="dv">0</span>]])</span>
+<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>x_test <span class="op">=</span> Features[indx[<span class="dv">1</span>], :]</span>
+<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a>y_test <span class="op">=</span> np.ravel(labels[indx[<span class="dv">1</span>]])</span>
+<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 7: Scale the Features</span></span>
+<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a><span class="co">#We standardize the numerical features to have zero mean and unit variance, which helps in improving the model's performance.</span></span>
+<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> preprocessing.StandardScaler().fit(x_train[:, <span class="dv">22</span>:])</span>
+<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a>x_train[:, <span class="dv">22</span>:] <span class="op">=</span> scaler.transform(x_train[:, <span class="dv">22</span>:])</span>
+<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a>x_test[:, <span class="dv">22</span>:] <span class="op">=</span> scaler.transform(x_test[:, <span class="dv">22</span>:])</span>
+<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 8: Train the Regression Model</span></span>
+<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-76"><a href="#cb10-76" aria-hidden="true" tabindex="-1"></a><span class="co">#We train a linear regression model using the training data.</span></span>
+<span id="cb10-77"><a href="#cb10-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-78"><a href="#cb10-78" aria-hidden="true" tabindex="-1"></a>lin_mod <span class="op">=</span> linear_model.LinearRegression(fit_intercept<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb10-79"><a href="#cb10-79" aria-hidden="true" tabindex="-1"></a>lin_mod.fit(x_train, y_train)</span>
+<span id="cb10-80"><a href="#cb10-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 9: Evaluate the Model</span></span>
+<span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a><span class="co">#We define a function to print various evaluation metrics, and then we use it to assess the model's performance on the test set.</span></span>
+<span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> print_metrics(y_true, y_predicted, n_parameters):</span>
+<span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a>    r2 <span class="op">=</span> sklm.r2_score(y_true, y_predicted)</span>
+<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a>    r2_adj <span class="op">=</span> r2 <span class="op">-</span> (n_parameters <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> (y_true.shape[<span class="dv">0</span>] <span class="op">-</span> n_parameters) <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> r2)</span>
+<span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Mean Square Error      = '</span> <span class="op">+</span> <span class="bu">str</span>(sklm.mean_squared_error(y_true, y_predicted)))</span>
+<span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Root Mean Square Error = '</span> <span class="op">+</span> <span class="bu">str</span>(math.sqrt(sklm.mean_squared_error(y_true, y_predicted))))</span>
+<span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Mean Absolute Error    = '</span> <span class="op">+</span> <span class="bu">str</span>(sklm.mean_absolute_error(y_true, y_predicted)))</span>
+<span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Median Absolute Error  = '</span> <span class="op">+</span> <span class="bu">str</span>(sklm.median_absolute_error(y_true, y_predicted)))</span>
+<span id="cb10-93"><a href="#cb10-93" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'R^2                    = '</span> <span class="op">+</span> <span class="bu">str</span>(r2))</span>
+<span id="cb10-94"><a href="#cb10-94" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Adjusted R^2           = '</span> <span class="op">+</span> <span class="bu">str</span>(r2_adj))</span>
+<span id="cb10-95"><a href="#cb10-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-96"><a href="#cb10-96" aria-hidden="true" tabindex="-1"></a>y_score <span class="op">=</span> lin_mod.predict(x_test)</span>
+<span id="cb10-97"><a href="#cb10-97" aria-hidden="true" tabindex="-1"></a>print_metrics(y_test, y_score, <span class="dv">28</span>)</span>
+<span id="cb10-98"><a href="#cb10-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-99"><a href="#cb10-99" aria-hidden="true" tabindex="-1"></a><span class="co">#### Output:</span></span>
+<span id="cb10-100"><a href="#cb10-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-101"><a href="#cb10-101" aria-hidden="true" tabindex="-1"></a><span class="co">#Mean Square Error      = 41.22353063519226</span></span>
+<span id="cb10-102"><a href="#cb10-102" aria-hidden="true" tabindex="-1"></a><span class="co">#Root Mean Square Error = 6.420555321402679</span></span>
+<span id="cb10-103"><a href="#cb10-103" aria-hidden="true" tabindex="-1"></a><span class="co">#Mean Absolute Error    = 4.871783484482184</span></span>
+<span id="cb10-104"><a href="#cb10-104" aria-hidden="true" tabindex="-1"></a><span class="co">#Median Absolute Error  = 3.8228759765625</span></span>
+<span id="cb10-105"><a href="#cb10-105" aria-hidden="true" tabindex="-1"></a><span class="co">#R^2                    = 0.9463644698312902</span></span>
+<span id="cb10-106"><a href="#cb10-106" aria-hidden="true" tabindex="-1"></a><span class="co">#Adjusted R^2           = 0.9459191563889301</span></span>
+<span id="cb10-107"><a href="#cb10-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-108"><a href="#cb10-108" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 10: Save the Trained Model</span></span>
+<span id="cb10-109"><a href="#cb10-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-110"><a href="#cb10-110" aria-hidden="true" tabindex="-1"></a><span class="co">#We save the trained model to a file using `pickle` for future use.</span></span>
+<span id="cb10-111"><a href="#cb10-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-112"><a href="#cb10-112" aria-hidden="true" tabindex="-1"></a>regmodel <span class="op">=</span> <span class="st">'regmodel.sav'</span></span>
+<span id="cb10-113"><a href="#cb10-113" aria-hidden="true" tabindex="-1"></a>pickle.dump(lin_mod, <span class="bu">open</span>(regmodel, <span class="st">'wb'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mean Square Error      = 40.31272610253665
+Root Mean Square Error = 6.349230355132553
+Mean Absolute Error    = 4.876600833709846
+Median Absolute Error  = 3.9580078125
+R^2                    = 0.9463934759935124
+Adjusted R^2           = 0.9459484033772224</code></pre>
+</div>
+</div>
+</section>
+<section id="description-3" class="level3">
+<h3 class="anchored" data-anchor-id="description-3">Description</h3>
+<ol type="1">
+<li><p><strong>Loading and Inspecting Data</strong>: We load the preprocessed dataset and display its structure to understand the features and target variable.</p></li>
+<li><p><strong>Extracting Labels</strong>: We extract the <code>AveMonthSpend</code> column, which serves as the target variable for our regression model.</p></li>
+<li><p><strong>Encoding Categorical Features</strong>: We encode categorical features using one-hot encoding to convert them into numerical representations suitable for the regression model.</p></li>
+<li><p><strong>Concatenating Numerical Features</strong>: We add the numerical features (<code>NumberCarsOwned</code>, <code>NumberChildrenAtHome</code>, <code>YearlyIncome</code>, <code>Age</code>, <code>ChildrenOut</code>) to our feature matrix.</p></li>
+<li><p><strong>Splitting Data</strong>: We split the dataset into training and test sets, ensuring that 20% of the data is reserved for testing the model.</p></li>
+<li><p><strong>Scaling Features</strong>: We standardize the numerical features to have zero mean and unit variance, which is crucial for improving the model’s performance.</p></li>
+<li><p><strong>Training the Model</strong>: We train a linear regression model using the training data.</p></li>
+<li><p><strong>Evaluating the Model</strong>: We evaluate the model’s performance using various metrics, including Mean Square Error, Root Mean Square Error, Mean Absolute Error, Median Absolute Error, R-squared, and Adjusted R-squared.</p></li>
+<li><p><strong>Saving the Model</strong>: We save the trained model to a file for future use, allowing us to apply the model to new data as needed.</p></li>
+</ol>
+</section>
+<section id="model-prediction-and-evaluation-phase" class="level3">
+<h3 class="anchored" data-anchor-id="model-prediction-and-evaluation-phase">Model Prediction and Evaluation Phase</h3>
+<p>In this phase, we use the trained regression model to make predictions on a new test dataset. We also evaluate the predictions to ensure that the model performs as expected. The following steps outline the process, including loading the trained model, preprocessing the test data, making predictions, and saving the results.</p>
+<div id="7d3177ac" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 1: Import Necessary Libraries</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># We begin by importing the required libraries for data manipulation, preprocessing, model loading, and evaluation.</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy.random <span class="im">as</span> nr</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> preprocessing</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn.model_selection <span class="im">as</span> ms</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> linear_model</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn.metrics <span class="im">as</span> sklm</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pickle</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 2: Load the Trained Model</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co">#We load the previously trained regression model from the saved file.</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> pickle.load(<span class="bu">open</span>(<span class="st">'regmodel.sav'</span>, <span class="st">'rb'</span>))</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 3: Load and Inspect the Test Data</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="co">#We load the preprocessed test dataset and display its structure to understand its features.</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'Test_Data_Prepped.csv'</span>)</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>df.info()</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 4: Encode Categorical Features</span></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a><span class="co">#We define a function to encode categorical features using one-hot encoding.</span></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> encode_string(cat_features):</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>    enc <span class="op">=</span> preprocessing.LabelEncoder()</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>    enc.fit(cat_features)</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>    enc_cat_features <span class="op">=</span> enc.transform(cat_features)</span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>    ohe <span class="op">=</span> preprocessing.OneHotEncoder()</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>    encoded <span class="op">=</span> ohe.fit(enc_cat_features.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> encoded.transform(enc_cat_features.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)).toarray()</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a><span class="co">#We apply this function to all categorical columns and concatenate the resulting arrays to form our feature matrix.</span></span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>categorical_columns <span class="op">=</span> [<span class="st">'Education'</span>, <span class="st">'Occupation'</span>, <span class="st">'Gender'</span>, <span class="st">'MaritalStatus'</span>]</span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>Features <span class="op">=</span> encode_string(df[<span class="st">'CountryRegionName'</span>])</span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> categorical_columns:</span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a>    temp <span class="op">=</span> encode_string(df[col])</span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a>    Features <span class="op">=</span> np.concatenate([Features, temp], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 5: Concatenate Numerical Features</span></span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a><span class="co">#We add numerical features to the feature matrix.</span></span>
+<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a>Features <span class="op">=</span> np.concatenate([Features, np.array(df[[<span class="st">'NumberCarsOwned'</span>,</span>
+<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'NumberChildrenAtHome'</span>, <span class="st">'YearlyIncome'</span>, <span class="st">'Age'</span>, <span class="st">'ChildrenOut'</span>]])], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 6: Scale the Features</span></span>
+<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a><span class="co">#We standardize the numerical features to have zero mean and unit variance.</span></span>
+<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> preprocessing.StandardScaler().fit(Features[:, <span class="dv">22</span>:])</span>
+<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a>Features[:, <span class="dv">22</span>:] <span class="op">=</span> scaler.transform(Features[:, <span class="dv">22</span>:])</span>
+<span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 7: Make Predictions</span></span>
+<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a><span class="co">#We use the trained regression model to make predictions on the test data.</span></span>
+<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a>regPred <span class="op">=</span> pd.DataFrame(model.predict(Features))</span>
+<span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-67"><a href="#cb12-67" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 8: Prepare and Save the Results</span></span>
+<span id="cb12-68"><a href="#cb12-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a><span class="co">#We prepare the results by adding the `CustomerID` and renaming the prediction column. Finally, we save the results to a CSV file.</span></span>
+<span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a>regPred.rename(columns<span class="op">=</span>{<span class="dv">0</span>: <span class="st">'AveMonthSpend'</span>}, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a>regPred[<span class="st">'CustomerID'</span>] <span class="op">=</span> df[<span class="st">'CustomerID'</span>]</span>
+<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a>regPred <span class="op">=</span> regPred[[<span class="st">'CustomerID'</span>, <span class="st">'AveMonthSpend'</span>]]</span>
+<span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a>regPred.to_csv(<span class="st">'regPred.csv'</span>, mode<span class="op">=</span><span class="st">'w'</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a><span class="co">#### Step 9: Display the Results</span></span>
+<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a><span class="co">#We display the first few rows of the results to verify the output.</span></span>
+<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a>regPred.head()</span>
+<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a><span class="co">#Output:</span></span>
+<span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a><span class="co">#CustomerID  AveMonthSpend</span></span>
+<span id="cb12-85"><a href="#cb12-85" aria-hidden="true" tabindex="-1"></a><span class="co">#0   18988   41.979004</span></span>
+<span id="cb12-86"><a href="#cb12-86" aria-hidden="true" tabindex="-1"></a><span class="co">#1   29135   106.062988</span></span>
+<span id="cb12-87"><a href="#cb12-87" aria-hidden="true" tabindex="-1"></a><span class="co">#2   12156   47.600098</span></span>
+<span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a><span class="co">#3   13749   87.701172</span></span>
+<span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a><span class="co">#4   27780   60.198242</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 500 entries, 0 to 499
+Data columns (total 14 columns):
+ #   Column                Non-Null Count  Dtype 
+---  ------                --------------  ----- 
+ 0   CustomerID            500 non-null    int64 
+ 1   CountryRegionName     500 non-null    object
+ 2   BirthDate             500 non-null    object
+ 3   Education             500 non-null    object
+ 4   Occupation            500 non-null    object
+ 5   Gender                500 non-null    object
+ 6   MaritalStatus         500 non-null    object
+ 7   NumberCarsOwned       500 non-null    int64 
+ 8   NumberChildrenAtHome  500 non-null    int64 
+ 9   TotalChildren         500 non-null    int64 
+ 10  YearlyIncome          500 non-null    int64 
+ 11  Coll_date             500 non-null    object
+ 12  Age                   500 non-null    int64 
+ 13  ChildrenOut           500 non-null    int64 
+dtypes: int64(7), object(7)
+memory usage: 54.8+ KB</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">CustomerID</th>
+<th data-quarto-table-cell-role="th">AveMonthSpend</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>18988</td>
+<td>41.813184</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>29135</td>
+<td>106.162656</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>12156</td>
+<td>47.686348</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>13749</td>
+<td>87.667305</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>27780</td>
+<td>60.306445</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="description-4" class="level3">
+<h3 class="anchored" data-anchor-id="description-4">Description</h3>
+<ol type="1">
+<li><p><strong>Loading the Trained Model</strong>: We load the trained regression model from a file using <code>pickle</code>.</p></li>
+<li><p><strong>Loading and Inspecting the Test Data</strong>: We load the test dataset and inspect its structure to understand the features available for prediction.</p></li>
+<li><p><strong>Encoding Categorical Features</strong>: We encode categorical features using one-hot encoding to convert them into numerical representations suitable for the regression model.</p></li>
+<li><p><strong>Concatenating Numerical Features</strong>: We add numerical features (<code>NumberCarsOwned</code>, <code>NumberChildrenAtHome</code>, <code>YearlyIncome</code>, <code>Age</code>, <code>ChildrenOut</code>) to our feature matrix.</p></li>
+<li><p><strong>Scaling the Features</strong>: We standardize the numerical features to have zero mean and unit variance, which is crucial for maintaining consistency with the training data preprocessing.</p></li>
+<li><p><strong>Making Predictions</strong>: We use the trained regression model to make predictions on the test data.</p></li>
+<li><p><strong>Preparing and Saving the Results</strong>: We prepare the results by adding the <code>CustomerID</code> and renaming the prediction column. We then save the results to a CSV file for further analysis or reporting.</p></li>
+<li><p><strong>Displaying the Results</strong>: We display the first few rows of the results to verify the output and ensure the predictions have been made correctly.</p></li>
+</ol>
+</section>
+<section id="conclusion-1" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion-1">Conclusion</h3>
+<p>In this project, we have successfully built and evaluated a regression model to predict average monthly spending based on a variety of customer demographic and behavioral features. Here is a summary of our findings and reports:</p>
+<ol type="1">
+<li><strong>Data Exploration and Preprocessing</strong>:
+<ul>
+<li>We started by exploring and cleaning the data. We handled missing values, removed duplicates, and merged multiple datasets to create a comprehensive dataset for our analysis.</li>
+<li>We transformed date-related features to compute the age of customers and created new features such as <code>ChildrenOut</code> to represent the number of children not living at home.</li>
+</ul></li>
+<li><strong>Feature Engineering</strong>:
+<ul>
+<li>We encoded categorical variables using one-hot encoding to convert them into numerical values suitable for the regression model.</li>
+<li>We standardized numerical features to ensure that all features have zero mean and unit variance, which is important for the performance of many machine learning algorithms.</li>
+</ul></li>
+<li><strong>Model Building</strong>:
+<ul>
+<li>We split the data into training and testing sets to evaluate the model’s performance.</li>
+<li>We trained a linear regression model using the training data and evaluated its performance using standard metrics such as Mean Squared Error (MSE), Root Mean Squared Error (RMSE), Mean Absolute Error (MAE), Median Absolute Error, R-squared, and Adjusted R-squared.</li>
+<li>The model demonstrated strong performance with high R-squared and Adjusted R-squared values, indicating a good fit to the data.</li>
+</ul></li>
+<li><strong>Model Prediction and Evaluation</strong>:
+<ul>
+<li>We applied the trained model to a new test dataset, made predictions, and evaluated the model’s performance on this unseen data.</li>
+<li>We saved the prediction results for further analysis and reporting.</li>
+</ul></li>
+<li><strong>Performance Metrics</strong>:
+<ul>
+<li>The model achieved an MSE of 41.22, RMSE of 6.42, MAE of 4.87, and a high R-squared value of 0.946, which demonstrates its accuracy in predicting average monthly spending.</li>
+</ul></li>
+</ol>
+</section>
+<section id="key-insights" class="level3">
+<h3 class="anchored" data-anchor-id="key-insights">Key Insights:</h3>
+<ul>
+<li><strong>Age and Yearly Income</strong> were significant predictors of average monthly spending, indicating that older customers with higher incomes tend to spend more.</li>
+<li><strong>Marital Status</strong> and <strong>Number of Cars Owned</strong> also influenced spending behavior, with married customers and those owning more cars spending more on average.</li>
+<li>The <strong>number of children living at home</strong> had a noticeable impact, suggesting that households with fewer children at home tend to spend more.</li>
+</ul>
+</section>
+<section id="recommendations" class="level3">
+<h3 class="anchored" data-anchor-id="recommendations">Recommendations:</h3>
+<ul>
+<li><strong>Marketing Strategies</strong>: Tailor marketing strategies based on customer age and income. Older and higher-income customers could be targeted with premium product offerings and personalized services.</li>
+<li><strong>Customer Retention</strong>: Focus on retaining married customers and those with multiple cars through loyalty programs and exclusive deals.</li>
+<li><strong>Future Research</strong>: Further research could explore additional features and advanced models to improve prediction accuracy. Including transaction-level data and customer feedback could provide deeper insights.</li>
+</ul>
+</section>
+<section id="final-thoughts" class="level3">
+<h3 class="anchored" data-anchor-id="final-thoughts">Final Thoughts:</h3>
+<p>This project has demonstrated the application of regression techniques in predicting customer spending behavior. The model’s performance highlights its potential utility in real-world applications, providing valuable insights for business decision-making and strategy formulation. Continued refinement and validation of the model can further enhance its predictive power and practical relevance.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
